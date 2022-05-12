@@ -26,7 +26,7 @@ for (let button of operatorButtons) {
 }
 
 function test(thing) {
-    display.innerHTML = thing;
+    cscreen.innerHTML = "current op ->" + thing;
 }
 
 /* basic calc logic*/
