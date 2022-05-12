@@ -5,8 +5,10 @@ const equalsButton = document.getElementById('eqbtn');
 const clearButton = document.getElementById('clrbtn');
 const deleteButton = document.getElementById('delbtn');
 const dotButton = document.getElementById('dotbtn');
+const currentScreen = document.getElementById('cscreen');
+const previusScreen = document.getElementById('pscreen');
 
-equalsButton.addEventListener('click', test);
+equalsButton.addEventListener('click', test());
 clearButton.addEventListener('click', test);
 deleteButton.addEventListener('click', test);
 dotButton.addEventListener('click', test);
@@ -24,7 +26,7 @@ for (let button of operatorButtons) {
 }
 
 function test(thing) {
-    console.log(thing);
+    display.innerHTML = thing;
 }
 
 /* basic calc logic*/
@@ -54,7 +56,7 @@ function operate(operator, a, b) {
             return substract(a, b)
         case 'x':
             return multiply(a, b)
-        case '÷':
+        case '/':
             if (b === 0) return null
             else return divide(a, b)
         default:
