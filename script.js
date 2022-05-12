@@ -1,56 +1,63 @@
 
-/*
-const test = document.getElementById("test");
-*/
+const numberButtons = document.getElementsByClassName('btn');
+const operatorButtons = document.getElementsByClassName('opbtn');
+const equalsButton = document.getElementById('eqbtn');
+const clearButton = document.getElementById('clrbtn');
+const deleteButton = document.getElementById('delbtn');
+const dotButton = document.getElementById('dotbtn');
 
-function calc() {
-    let n1 = parseFloat(prompt("n1?", 1));
-    let n2 = parseFloat(prompt("n2?", 1));
-    prompt(add(n1, n2));
+equalsButton.addEventListener('click', test);
+clearButton.addEventListener('click', test);
+deleteButton.addEventListener('click', test);
+dotButton.addEventListener('click', test);
+
+for (let button of numberButtons) {
+    button.addEventListener('click', () => {
+        test(button.textContent);
+    });
 }
 
-
-/* calc logic */
-
-const add = function (n1, n2) {
-    return n1 + n2;
-};
-
-const subtract = function (n1, n2) {
-    return (n1 - n2);
-};
-
-const sum = function (arr) {
-    let sum = 0;
-    arr.forEach(element => {
-        sum += element;
+for (let button of operatorButtons) {
+    button.addEventListener('click', () => {
+        test(button.textContent);
     });
-    return sum;
-};
+}
 
-const multiply = function (arr) {
-    let mul = 1;
-    arr.forEach(element => {
-        mul *= element;
-    });
-    return mul;
-};
+function test(thing) {
+    console.log(thing);
+}
 
-const power = function (n1, n2) {
-    let ans = 1;
-    for (let i = 0; i < n2; i++) {
-        ans *= n1;
+/* basic calc logic*/
+function add(a, b) {
+    return a + b
+}
+
+function substract(a, b) {
+    return a - b
+}
+
+function multiply(a, b) {
+    return a * b
+}
+
+function divide(a, b) {
+    return a / b
+}
+
+function operate(operator, a, b) {
+    a = Number(a)
+    b = Number(b)
+    switch (operator) {
+        case '+':
+            return add(a, b)
+        case '-':
+            return substract(a, b)
+        case 'x':
+            return multiply(a, b)
+        case '÷':
+            if (b === 0) return null
+            else return divide(a, b)
+        default:
+            return null
     }
-    return ans;
-};
-
-const factorial = function (n) {
-    if (n < 0)
-        return -1;
-    else if (n == 0)
-        return 1;
-    else {
-        return (n * factorial(n - 1));
-    }
-};
-
+}
