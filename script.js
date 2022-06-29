@@ -72,7 +72,7 @@ function resetScreen() {
 
 function clear() {
     currentScreen.textContent = '0'
-    previusScreen.textContent = ''
+    previusScreen.textContent = '0'
     firstOperand = ''
     secondOperand = ''
 }
