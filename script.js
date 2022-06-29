@@ -1,3 +1,5 @@
+firstOperand = '';
+secondOperand = '';
 
 const numberButtons = document.getElementsByClassName('btn');
 const operatorButtons = document.getElementsByClassName('opbtn');
@@ -9,24 +11,39 @@ const currentScreen = document.getElementById('cscreen');
 const previusScreen = document.getElementById('pscreen');
 
 equalsButton.addEventListener('click', test());
-clearButton.addEventListener('click', test);
-deleteButton.addEventListener('click', test);
-dotButton.addEventListener('click', test);
+clearButton.addEventListener('click', clear());
+//deleteButton.addEventListener('click', test());
+//dotButton.addEventListener('click', test());
 
 for (let button of numberButtons) {
     button.addEventListener('click', () => {
-        test(button.textContent);
+        appendNumber(button.textContent);
     });
 }
 
 for (let button of operatorButtons) {
     button.addEventListener('click', () => {
-        test(button.textContent);
+        setOperation(button.textContent);
     });
 }
 
-function test(thing) {
-    cscreen.innerHTML = "current op ->" + thing;
+function appendNumber(number) {
+    cscreen.textContent += number;
+}
+
+function setOperation(operation) {
+    cscreen.textContent += operation;
+}
+
+function clear() {
+    currentScreen.textContent = '0'
+    previusScreen.textContent = ''
+    firstOperand = ''
+    secondOperand = ''
+}
+
+function test() {
+    console.log("CIAO");
 }
 
 /* basic calc logic*/
