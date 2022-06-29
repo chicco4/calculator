@@ -3,19 +3,20 @@ let secondOperand = ''
 let currentOperation = null
 let shouldResetScreen = false
 
-const numberButtons = document.getElementsByClassName('btn');
+const numberButtons = document.getElementsByClassName('nbtn');
 const operatorButtons = document.getElementsByClassName('opbtn');
 const equalsButton = document.getElementById('eqbtn');
 const clearButton = document.getElementById('clrbtn');
 const deleteButton = document.getElementById('delbtn');
-const dotButton = document.getElementById('dotbtn');
-const currentScreen = document.getElementById('cscreen');
-const previusScreen = document.getElementById('pscreen');
+const pointButton = document.getElementById('dotbtn');
+const lastOperationScreen = document.getElementById('pscreen');
+const currentOperationScreen = document.getElementById('cscreen');
 
-equalsButton.addEventListener('click', evaluate);
-clearButton.addEventListener('click', clear);
-deleteButton.addEventListener('click', deleteNumber);
-//dotButton.addEventListener('click', test());
+window.addEventListener('keydown', handleKeyboardInput)
+equalsButton.addEventListener('click', evaluate)
+clearButton.addEventListener('click', clear)
+deleteButton.addEventListener('click', deleteNumber)
+pointButton.addEventListener('click', appendPoint)
 
 for (let button of numberButtons) {
     button.addEventListener('click', () => {
@@ -28,32 +29,56 @@ for (let button of operatorButtons) {
         setOperation(button.textContent);
     });
 }
-
 function appendNumber(number) {
-    if (currentScreen.textContent === '0' || shouldResetScreen)
-      resetScreen()
-    currentScreen.textContent += number
-  }
+    if (currentOperationScreen.textContent === '0' || shouldResetScreen)
+        resetScreen()
+    currentOperationScreen.textContent += number
+}
 
-function setOperation(operation) {
+function resetScreen() {
+    currentOperationScreen.textContent = ''
+    shouldResetScreen = false
+}
+
+function clear() {
+    currentOperationScreen.textContent = '0'
+    lastOperationScreen.textContent = ''
+    firstOperand = ''
+    secondOperand = ''
+    currentOperation = null
+}
+
+function appendPoint() {
+    if (shouldResetScreen) resetScreen()
+    if (currentOperationScreen.textContent === '')
+        currentOperationScreen.textContent = '0'
+    if (currentOperationScreen.textContent.includes('.')) return
+    currentOperationScreen.textContent += '.'
+}
+
+function deleteNumber() {
+    currentOperationScreen.textContent = currentOperationScreen.textContent.toString().slice(0, -1)
+}
+
+function setOperation(operator) {
     if (currentOperation !== null) evaluate()
-    firstOperand = currentScreen.textContent
-    currentOperation = operation
-    previusScreen.textContent = `${firstOperand} ${currentOperation}`
+    firstOperand = currentOperationScreen.textContent
+    currentOperation = operator
+    lastOperationScreen.textContent = `${firstOperand} ${currentOperation}`
     shouldResetScreen = true
 }
 
 function evaluate() {
-    if (shouldResetScreen) return
-    if (currentOperation === '÷' && currentScreen.textContent == '0') {
+    if (currentOperation === null || shouldResetScreen) return
+    if (currentOperation === '÷' && currentOperationScreen.textContent === '0') {
         alert("You can't divide by 0!")
         return
     }
-    secondOperand = currentScreen.textContent
-    currentScreen.textContent = roundResult(
+    secondOperand = currentOperationScreen.textContent
+    currentOperationScreen.textContent = roundResult(
         operate(currentOperation, firstOperand, secondOperand)
     )
-    previusScreen.textContent = `${firstOperand} ${currentOperation} ${secondOperand} =`
+    lastOperationScreen.textContent = `${firstOperand} ${currentOperation} ${secondOperand} =`
     currentOperation = null
 }
 
@@ -61,23 +86,23 @@ function roundResult(number) {
     return Math.round(number * 1000) / 1000
 }
 
-function deleteNumber() {
-    currentScreen.textContent = currentScreen.textContent.toString().slice(0, -1)
+function handleKeyboardInput(e) {
+    if (e.key >= 0 && e.key <= 9) appendNumber(e.key)
+    if (e.key === '.') appendPoint()
+    if (e.key === '=' || e.key === 'Enter') evaluate()
+    if (e.key === 'Backspace') deleteNumber()
+    if (e.key === 'Escape') clear()
+    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/')
+        setOperation(convertOperator(e.key))
 }
 
-function resetScreen() {
-    currentScreen.textContent = ''
-    shouldResetScreen = false
+function convertOperator(keyboardOperator) {
+    if (keyboardOperator === '/') return '÷'
+    if (keyboardOperator === '*') return 'x'
+    if (keyboardOperator === '-') return '-'
+    if (keyboardOperator === '+') return '+'
 }
 
-function clear() {
-    currentScreen.textContent = '0'
-    previusScreen.textContent = '0'
-    firstOperand = ''
-    secondOperand = ''
-}
-
-/* basic calc logic*/
 function add(a, b) {
     return a + b
 }
@@ -104,7 +129,7 @@ function operate(operator, a, b) {
             return substract(a, b)
         case 'x':
             return multiply(a, b)
-        case '/':
+        case '÷':
             if (b === 0) return null
             else return divide(a, b)
         default:
