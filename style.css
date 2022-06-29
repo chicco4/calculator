@@ -32,6 +32,7 @@ body {
     border: 2px var(--border) solid;
     border-radius: 15px;
     background-color: var(--calculator);
+    min-height: 32px;
 }
 
 .screen {
@@ -43,7 +44,18 @@ body {
     text-align: right;
     word-wrap: break-word;
     word-break: break-all;
-    font-weight: bold;
+    text-align: right;
+    font-size: large;
+    min-width:300px;
+    min-height: 70px;
+}
+
+#pscreen {
+    font-size: 20px;
+}
+
+#cscreen {
+    font-size: 40px;
 }
 
 .buttons {
